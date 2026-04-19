@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NL TIMES | Neural Feed</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #050505;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent: #00ff95;
+            --text-main: #e0e0e0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Space Grotesk', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            background-image: radial-gradient(circle at top right, rgba(0, 255, 149, 0.05), transparent);
+        }
+
+        nav {
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(5,5,5,0.9);
+        }
+
+        .post-container {
+            max-width: 850px;
+            width: 90%; /* Adjusted to prevent overflow */
+            margin: 30px auto;
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+            overflow: hidden; /* Fixes the box sticking out */
+        }
+
+        @media (min-width: 768px) {
+            .post-container { padding: 50px; margin: 60px auto; }
+        }
+
+        .meta-info {
+            display: flex;
+            gap: 15px;
+            font-size: 0.85rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .featured-image {
+            width: 100%;
+            height: auto;
+            max-height: 450px;
+            object-fit: cover;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            border: 1px solid var(--glass-border);
+        }
+
+        h1 {
+            font-size: clamp(1.8rem, 6vw, 3rem);
+            background: linear-gradient(to right, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .post-content { color: #ccc; font-size: 1.05rem; }
+        .post-content img { max-width: 100%; height: auto; border-radius: 12px; margin: 20px 0; }
+
+        /* Comments Styling */
+        .comment-card {
+            background: rgba(255,255,255,0.02);
+            padding: 20px;
+            border-radius: 18px;
+            margin-bottom: 15px;
+            border-left: 2px solid var(--accent);
+        }
+
+        .comment-card strong { color: var(--accent); display: block; margin-bottom: 5px; }
+        .comment-card div { color: #fff; opacity: 0.9; }
+
+        .submission-box {
+            margin-top: 40px; 
+            background: rgba(255,255,255,0.01); 
+            padding: 20px; 
+            border-radius: 20px; 
+            border: 1px solid var(--glass-border);
+            box-sizing: border-box; /* Ensures padding doesn't push it out */
+        }
+
+        input, textarea {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            padding: 14px;
+            border-radius: 12px;
+            color: white;
+            margin-bottom: 15px;
+            font-size: 16px;
+            outline: none;
+            box-sizing: border-box;
+        }
+        
+        input:focus, textarea:focus { border-color: var(--accent); }
+
+        #submit-btn {
+            background: var(--accent);
+            color: #000;
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        footer {
+            text-align: center;
+            padding: 60px 20px;
+            border-top: 1px solid var(--glass-border);
+            margin-top: 50px;
+            color: #666;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="blog.html" style="color: var(--accent); text-decoration: none; font-size: 0.8rem; font-weight: bold;">← BACK TO NL TIMES</a>
+        <div style="font-weight: 700; font-size: 0.9rem; letter-spacing: 1px;">NACOS <span style="color:var(--accent)">LASU TIMES</span></div>
+    </nav>
+
+    <article class="post-container" id="post-data">
+        <div style="text-align: center; color: var(--accent); padding: 100px;">Establishing Neural Link...</div>
+    </article>
+
+    <footer>
+        <p>&copy; 2026 NACOS LASU | THE VISIONARY LED 8TH ADMINISTRATION</p>
+        <p style="color: var(--accent); margin-top: 10px; letter-spacing: 2px;">POWERED BY EMPEROR</p>
+    </footer>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const postId = urlParams.get('id');
+        const API_BASE = "https://dev-nacoslasu-blog.pantheonsite.io/wp-json/wp/v2";
+
+        async function loadData() {
+            try {
+                // Fetch Post with Embeds to get Author/Category
+                const [postRes, commRes] = await Promise.all([
+                    fetch(`${API_BASE}/posts/${postId}?_embed&nocache=${Date.now()}`),
+                    fetch(`${API_BASE}/comments?post=${postId}&nocache=${Date.now()}`)
+                ]);
+
+                const post = await postRes.json();
+                const comments = await commRes.json();
+
+                const img = post._embedded['wp:featuredmedia'] ? post._embedded['wp:featuredmedia'][0].source_url : '';
+                const author = post._embedded['author'] ? post._embedded['author'][0].name : 'Admin';
+                const date = new Date(post.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+                const category = post._embedded['wp:term'] ? post._embedded['wp:term'][0][0].name : 'News';
+
+                document.getElementById('post-data').innerHTML = `
+                    <div class="meta-info">
+                        <span>${category}</span> • <span>${date}</span> • <span>BY ${author}</span>
+                    </div>
+                    <img src="${img}" class="featured-image">
+                    <h1>${post.title.rendered}</h1>
+                    <div class="post-content">${post.content.rendered}</div>
+                    
+                    <div style="margin-top: 50px; border-top: 1px solid var(--glass-border); padding-top: 30px;">
+                        <h3 style="margin-bottom:20px;">Student Discussions (${comments.length})</h3>
+                        <div id="list">
+                            ${comments.map(c => `
+                                <div class="comment-card">
+                                    <strong>${c.author_name}</strong>
+                                    <div>${c.content.rendered}</div>
+                                </div>
+                            `).join('') || '<p style="color:#666">No transmissions found.</p>'}
+                        </div>
+
+                        <div class="submission-box">
+                            <h4 style="margin-bottom:15px; color:var(--accent)">Submit Transmission</h4>
+                            <input type="text" id="c-name" placeholder="Full Name / Alias">
+                            <textarea id="c-body" placeholder="Your Message..." rows="3"></textarea>
+                            <button id="submit-btn" onclick="sendIt()">SEND TRANSMISSION</button>
+                            <p id="msg" style="font-size:0.85rem; margin-top:15px; text-align:center;"></p>
+                        </div>
+                    </div>
+                `;
+            } catch (e) {
+                document.getElementById('post-data').innerHTML = "<div style='text-align:center; padding:50px;'>Neural Link Interrupted. Verify Feed ID.</div>";
+            }
+        }
+
+        async function sendIt() {
+            const name = document.getElementById('c-name').value;
+            const body = document.getElementById('c-body').value;
+            const msg = document.getElementById('msg');
+            const btn = document.getElementById('submit-btn');
+
+            if(!name || !body) return alert("All fields are required.");
+
+            const user = "@NACOS_LASU_000"; 
+            const appPass = "zSXd Bjo3 9ZYS TmQt OHKw aDfI";
+            const token = btoa(`${user}:${appPass}`);
+
+            btn.innerText = "AUTHORIZING...";
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(`${API_BASE}/comments`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Basic ${token}`
+                    },
+                    body: JSON.stringify({
+                        post: postId, 
+                        author_name: name, 
+                        content: body,
+                        status: 'approve'
+                    })
+                });
+
+                if(res.ok) {
+                    msg.innerText = "Transmission successful! Syncing thread...";
+                    msg.style.color = "#00ff95";
+                    document.getElementById('c-name').value = '';
+                    document.getElementById('c-body').value = '';
+                    setTimeout(() => location.reload(), 1500); 
+                } else {
+                    const err = await res.json();
+                    msg.innerText = "Auth Error: " + err.message;
+                    msg.style.color = "red";
+                }
+            } catch(err) { 
+                msg.innerText = "Connection Error. Check Network Link.";
+                msg.style.color = "red";
+            } finally {
+                btn.innerText = "SEND TRANSMISSION";
+                btn.disabled = false;
+            }
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

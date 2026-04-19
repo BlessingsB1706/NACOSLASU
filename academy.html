@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NL ACADEMY | The Visionary Curation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@0.400.0"></script>
+    
+    <style>
+        :root {
+            --bg: #050505;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent: #00ff95;
+            --accent-glow: rgba(0, 255, 149, 0.3);
+            --text-main: #e0e0e0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Space Grotesk', sans-serif; }
+        body { background-color: var(--bg); color: var(--text-main); overflow-x: hidden; }
+
+        /* --- NAVIGATION --- */
+        nav {
+            padding: 20px 5%; display: flex; justify-content: space-between; align-items: center;
+            backdrop-filter: blur(15px); position: sticky; top: 0; z-index: 1000;
+            border-bottom: 1px solid var(--glass-border); background: rgba(5, 5, 5, 0.8);
+        }
+        .back-btn { color: var(--accent); text-decoration: none; font-size: 0.85rem; font-weight: bold; letter-spacing: 1px; transition: 0.3s; }
+        .back-btn:hover { transform: translateX(-5px); text-shadow: 0 0 10px var(--accent-glow); }
+
+        /* --- HEADER --- */
+        .header { text-align: center; padding: 80px 5% 40px; }
+        .header h1 { font-size: clamp(2rem, 8vw, 3.5rem); background: linear-gradient(to right, #fff, var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 15px; }
+        .header p { color: #666; font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+        /* --- FILTER TABS --- */
+        .tabs { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 50px; padding: 0 5%; }
+        .tab-btn { background: var(--glass); border: 1px solid var(--glass-border); color: #888; padding: 10px 22px; border-radius: 50px; cursor: pointer; transition: 0.3s; font-size: 0.85rem; }
+        .tab-btn.active, .tab-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(0, 255, 149, 0.05); }
+
+        /* --- GRID --- */
+        .course-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 40px; padding: 0 5%; max-width: 1400px; margin: 0 auto; }
+        
+        .course-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 30px; padding: 12px; transition: 0.4s; cursor: pointer; display: block; text-decoration: none; color: inherit; }
+        .course-card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        
+        .thumb-wrap { width: 100%; height: 200px; border-radius: 20px; position: relative; background: #111; overflow: hidden; }
+        .thumb-wrap img { width: 100%; height: 100%; object-fit: cover; opacity: 0.5; transition: 0.5s; }
+        .course-card:hover img { opacity: 0.8; transform: scale(1.05); }
+        
+        .play-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60px; height: 60px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #000; box-shadow: 0 0 30px rgba(0, 255, 149, 0.4); }
+
+        .info { padding: 25px 15px; }
+        .tag { font-size: 0.7rem; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; border: 1px solid var(--accent); padding: 4px 12px; border-radius: 50px; margin-bottom: 15px; display: inline-block; }
+        .info h3 { font-size: 1.3rem; color: #fff; margin-bottom: 20px; font-weight: 700; }
+        
+        .meta-row { display: flex; justify-content: space-between; align-items: center; color: #666; font-size: 0.85rem; border-top: 1px solid var(--glass-border); padding-top: 15px; }
+        .meta-item { display: flex; align-items: center; gap: 6px; }
+
+        /* --- VIDEO MODAL --- */
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; z-index: 2000; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(10px); }
+        .modal-content { width: 100%; max-width: 1000px; aspect-ratio: 16/9; background: #000; border: 1px solid var(--glass-border); border-radius: 25px; overflow: hidden; position: relative; }
+        .close-modal { position: absolute; top: -50px; right: 0; color: var(--accent); cursor: pointer; font-weight: bold; font-size: 1rem; text-transform: uppercase; }
+
+        /* --- FOOTER (EMPEROR SIGNATURE) --- */
+        footer { background: #000; padding: 80px 5% 30px; border-top: 1px solid var(--glass-border); margin-top: 120px; }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 60px; }
+        .circle-frame { width: 75px; height: 75px; border-radius: 50%; border: 1px solid var(--accent); padding: 5px; background: #0a0a0a; box-shadow: 0 0 20px var(--accent-glow); }
+        
+        .footer-links h4 { color: #fff; margin-bottom: 25px; text-transform: uppercase; font-size: 1rem; letter-spacing: 1px; }
+        .footer-links ul { list-style: none; }
+        .footer-links li { margin-bottom: 15px; }
+        .footer-links a { color: #666; text-decoration: none; font-size: 0.95rem; transition: 0.3s; }
+        .footer-links a:hover { color: var(--accent); padding-left: 10px; }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="back-btn">← RETURN TO ECOSYSTEM </a>
+        <div style="letter-spacing: 2px; font-weight: bold;">NACOS LASU<span style="color:var(--accent)"> ACADEMY</span></div>
+    </nav>
+
+    <header class="header">
+        <h1>Unrestricted Knowledge</h1>
+        <p>Premium Curated Tech Paths<strong> For The Next Generation</strong> Of Visionaries</strong>.</p>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="filter('all')">All Tracks</button>
+        <button class="tab-btn" onclick="filter('Frontend')">Frontend</button>
+        <button class="tab-btn" onclick="filter('Backend')">Backend</button>
+        <button class="tab-btn" onclick="filter('Cyber')">Cybersecurity</button>
+        <button class="tab-btn" onclick="filter('Data')">Data Analytics</button>
+        <button class="tab-btn" onclick="filter('ML')">Machine Learning</button>
+        <button class="tab-btn" onclick="filter('Web3')">Web3</button>
+        <button class="tab-btn" onclick="filter('UIUX')">UI/UX</button>
+    </div>
+
+    <main class="course-grid" id="courseGrid"></main>
+
+    <div class="modal" id="videoModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeVideo()">[ Close Transmission ]</span>
+            <iframe id="ytPlayer" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <img src="about.jpg" alt="Logo" class="circle-frame">
+                    <div>
+                        <h3 style="color: #fff;">NACOS-LASU</h3>
+                        <p style="color: var(--accent); font-size: 0.7rem;">8TH ADMINISTRATION</p>
+                    </div>
+                </div>
+                <p style="color:#666; font-size: 0.95rem; margin-top:25px; line-height:1.8; max-width: 350px;">
+                    The Visionary led Administration. Powered by Mubaarak Hassan (Emperor).
+                </p>
+                <div style="margin-top: 40px; display: flex; flex-direction: column; align-items: center; width: fit-content;">
+                    <img src="emp.png" alt="Emperor" class="circle-frame">
+                    <p style="font-size: 0.75rem; color: #888; margin-top: 12px; font-weight: bold; letter-spacing: 2px;">EMPEROR</p>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#portals">Portals</a></li>
+                    <li><a href="index.html#leadership">Leadership</a></li>
+                    <li><a href="#">Alumni Forum (Soon)</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-links">
+                <h4>Digital Services</h4>
+                <ul>
+                    <li><a href="https://nacos-payment-client.vercel.app/">E-Payment</a></li>
+                    <li><a href="blog.html">NACOSLASU TIMES</a></li>
+                    <li><a href="https://hub.ekopeters.com.ng/">EKO Hub</a></li>
+                    <li><a href="https://nacos-payment-client.vercel.app/verify">Verify Receipt</a></li>
+                </ul>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 60px; color: #222; font-size: 0.8rem; border-top: 1px solid #111; padding-top: 30px;">
+            &copy; 2026 NACOS LASU. Built with Precision by Hon. Emperor.
+        </div>
+    </footer>
+
+    <script>
+        const courses = [
+            { title: "Frontend Roadmap 2026", id: "Tef1e9FiSR0", cat: "Frontend", time: "15 Mins", level: "Beginner", type: "Roadmap" },
+            { title: "Full Frontend Mastery", id: "zJSY8tbf_ys", cat: "Frontend", time: "12 Hours", level: "Professional", type: "Course" },
+            { title: "Backend Systems Path", id: "OeEHJgzqS1k", cat: "Backend", time: "20 Mins", level: "Beginner", type: "Roadmap" },
+            { title: "Node.js & Databases", id: "1oTuMPIwHmk", cat: "Backend", time: "8 Hours", level: "Intermediate", type: "Course" },
+            { title: "Cybersecurity Roadmap", id: "hM73lbxL1lI", cat: "Cyber", time: "18 Mins", level: "Beginner", type: "Roadmap" },
+            { title: "Ethical Hacking Full Course", id: "hXSFdwIOfnE", cat: "Cyber", time: "10 Hours", level: "Professional", type: "Course" },
+            { title: "Data Analytics Roadmap", id: "YRJbhFLLPyE", cat: "Data", time: "14 Mins", level: "Beginner", type: "Roadmap" },
+            { title: "Data Analytics Masterclass", id: "pCJ15nGFgVg", cat: "Data", time: "9 Hours", level: "Professional", type: "Course" },
+            { title: "Machine Learning Guide", id: "7IgVGSaQPaw", cat: "ML", time: "25 Mins", level: "Intermediate", type: "Roadmap" },
+            { title: "Machine Learning Full Course", id: "i_LwzRVP7bg", cat: "ML", time: "11 Hours", level: "Professional", type: "Course" },
+            { title: "Web3 & Blockchain Roadmap", id: "gdiao7L9GjE", cat: "Web3", time: "22 Mins", level: "Beginner", type: "Roadmap" },
+            { title: "Blockchain Dev Course", id: "gyMwXuJrbJQ", cat: "Web3", time: "14 Hours", level: "Professional", type: "Course" },
+            { title: "UI/UX Design Roadmap", id: "2OlT0n6JlUg", cat: "UIUX", time: "12 Mins", level: "Beginner", type: "Roadmap" },
+            { title: "Advanced Figma Mastery", id: "MBblN98-5lg", cat: "UIUX", time: "7 Hours", level: "Intermediate", type: "Course" }
+        ];
+
+        function render(items) {
+            const grid = document.getElementById('courseGrid');
+            grid.innerHTML = items.map(c => `
+                <div class="course-card" onclick="playVideo('${c.id}')">
+                    <div class="thumb-wrap">
+                        <img src="https://img.youtube.com/vi/${c.id}/maxresdefault.jpg">
+                        <div class="play-btn"><i data-lucide="play"></i></div>
+                    </div>
+                    <div class="info">
+                        <span class="tag">${c.type}</span>
+                        <h3>${c.title}</h3>
+                        <div class="meta-row">
+                            <div class="meta-item"><i data-lucide="clock" style="width:14px;"></i> ${c.time}</div>
+                            <div class="meta-item">${c.level}</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function filter(category) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            const filtered = category === 'all' ? courses : courses.filter(c => c.cat === category);
+            render(filtered);
+        }
+
+        function playVideo(id) {
+            document.getElementById('ytPlayer').src = `https://www.youtube.com/embed/${id}?autoplay=1`;
+            document.getElementById('videoModal').style.display = 'flex';
+        }
+
+        function closeVideo() {
+            document.getElementById('videoModal').style.display = 'none';
+            document.getElementById('ytPlayer').src = '';
+        }
+
+        render(courses);
+    </script>
+</body>
+</html>
